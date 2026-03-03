@@ -1,0 +1,19 @@
+{
+  "name": "com.azzazello.localizeddomain",
+  "version": "0.1.0",
+  "displayName": "Localized Domain",
+  "description": "Localization framework for Unity.",
+  "unity": "2020.3",
+  "dependencies": {
+  },
+  "keywords": [
+    "Localization",
+    "I18n",
+    "L10n"
+  ],
+  "author": {
+    "name": "Azzazelloqq",
+    "email": "bog22232@ya.ru",
+    "url": "https://github.com/Azzazelloqq"
+  }
+}

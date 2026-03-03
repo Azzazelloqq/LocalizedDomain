@@ -1,0 +1,16 @@
+{
+    "name": "LocalizedDomain.Unity",
+    "rootNamespace": "LocalizedDomain.Unity",
+    "references": [
+        "LocalizedDomain.Core",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

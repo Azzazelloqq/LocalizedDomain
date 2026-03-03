@@ -1,0 +1,13 @@
+{
+    "name": "LocalizedDomain.Core",
+    "rootNamespace": "LocalizedDomain",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

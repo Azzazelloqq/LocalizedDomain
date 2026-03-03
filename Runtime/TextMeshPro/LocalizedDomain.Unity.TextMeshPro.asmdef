@@ -1,0 +1,24 @@
+{
+    "name": "LocalizedDomain.Unity.TextMeshPro",
+    "rootNamespace": "LocalizedDomain.Unity",
+    "references": [
+        "LocalizedDomain.Unity",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "LOCALIZEDDOMAIN_TMP"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "1.0.0",
+            "define": "LOCALIZEDDOMAIN_TMP"
+        }
+    ],
+    "noEngineReferences": false
+}

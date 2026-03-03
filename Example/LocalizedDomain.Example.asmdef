@@ -1,0 +1,7 @@
+{
+    "name": "LocalizedDomain.Example",
+    "references": [
+        "LocalizedDomain.Unity",
+        "LocalizedDomain.Core"
+    ]
+}
