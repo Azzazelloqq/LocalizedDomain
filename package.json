@@ -1,6 +1,6 @@
 {
   "name": "com.azzazello.localizeddomain",
-  "version": "0.1.2",
+  "version": "0.1.21",
   "displayName": "Localized Domain",
   "description": "Localization framework for Unity.",
   "unity": "2020.3",
