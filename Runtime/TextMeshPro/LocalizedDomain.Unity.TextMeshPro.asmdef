@@ -10,15 +10,5 @@
     "allowUnsafeCode": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "LOCALIZEDDOMAIN_TMP"
-    ],
-    "versionDefines": [
-        {
-            "name": "com.unity.textmeshpro",
-            "expression": "1.0.0",
-            "define": "LOCALIZEDDOMAIN_TMP"
-        }
-    ],
     "noEngineReferences": false
 }
