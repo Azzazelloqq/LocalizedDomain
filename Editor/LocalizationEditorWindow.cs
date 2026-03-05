@@ -15,6 +15,7 @@ public sealed class LocalizationEditorWindow : EditorWindow
 	private const string PrefsLocaleSearch = "LocalizedDomain.Editor.LocaleSearch";
 	private const string PrefsSelectedKey = "LocalizedDomain.Editor.SelectedKey";
 	private const string PrefsAutoSave = "LocalizedDomain.Editor.AutoSave";
+	private static readonly string[] SystemLanguageOptions = BuildSystemLanguageOptions();
 
 	[SerializeField]
 	private LocalizationEditorSettings _settings;
@@ -204,6 +205,14 @@ public sealed class LocalizationEditorWindow : EditorWindow
 
 		EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.LabelField("Code", EditorStyles.miniLabel, GUILayout.Width(120));
+		EditorGUILayout.LabelField("Display Name", EditorStyles.miniLabel);
+		EditorGUILayout.LabelField("System Language", EditorStyles.miniLabel, GUILayout.Width(120));
+		EditorGUILayout.LabelField("Remove", EditorStyles.miniLabel, GUILayout.Width(70));
+		EditorGUILayout.EndHorizontal();
+		GUILayout.Space(2f);
+
 		_localeListScroll = EditorGUILayout.BeginScrollView(_localeListScroll, GUILayout.Height(160));
 		var locales = _project.Locales;
 		for (var i = 0; i < locales.Count; i++)
@@ -218,8 +227,7 @@ public sealed class LocalizationEditorWindow : EditorWindow
 			var oldCode = locale.Code;
 			var newCode = EditorGUILayout.TextField(oldCode ?? string.Empty, GUILayout.Width(120));
 			var newName = EditorGUILayout.TextField(locale.DisplayName ?? string.Empty);
-			var newSystemLanguage = EditorGUILayout.TextField(locale.SystemLanguage ?? string.Empty,
-				GUILayout.Width(120));
+			var newSystemLanguage = DrawSystemLanguagePopup(locale.SystemLanguage, GUILayout.Width(120));
 
 			if (GUILayout.Button("Remove", GUILayout.Width(70)))
 			{
@@ -272,8 +280,7 @@ public sealed class LocalizationEditorWindow : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		_newLocaleCode = EditorGUILayout.TextField(_newLocaleCode ?? string.Empty, GUILayout.Width(120));
 		_newLocaleName = EditorGUILayout.TextField(_newLocaleName ?? string.Empty);
-		_newLocaleSystemLanguage = EditorGUILayout.TextField(_newLocaleSystemLanguage ?? string.Empty,
-			GUILayout.Width(120));
+		_newLocaleSystemLanguage = DrawSystemLanguagePopup(_newLocaleSystemLanguage, GUILayout.Width(120));
 		if (GUILayout.Button("Add Locale", GUILayout.Width(100)))
 		{
 			AddLocale(_newLocaleCode, _newLocaleName, _newLocaleSystemLanguage);
@@ -389,7 +396,10 @@ public sealed class LocalizationEditorWindow : EditorWindow
 
 		EditorGUILayout.Space();
 		EditorGUI.BeginChangeCheck();
-		_localeSearch = EditorGUILayout.TextField("Locale Filter", _localeSearch);
+		var localeFilterLabel = new GUIContent(
+			"Locale Filter",
+			"Filters visible locale fields by code or display name. Leave empty to show all.");
+		_localeSearch = EditorGUILayout.TextField(localeFilterLabel, _localeSearch);
 		if (EditorGUI.EndChangeCheck())
 		{
 			EditorPrefs.SetString(PrefsLocaleSearch, _localeSearch ?? string.Empty);
@@ -1101,6 +1111,60 @@ public sealed class LocalizationEditorWindow : EditorWindow
 		}
 
 		entry.Values[locale] = text ?? string.Empty;
+	}
+
+	private static string[] BuildSystemLanguageOptions()
+	{
+		var names = Enum.GetNames(typeof(SystemLanguage));
+		var options = new string[names.Length + 1];
+		options[0] = "<none>";
+		for (var i = 0; i < names.Length; i++)
+		{
+			options[i + 1] = names[i];
+		}
+
+		return options;
+	}
+
+	private static int GetSystemLanguageIndex(string value)
+	{
+		if (string.IsNullOrWhiteSpace(value))
+		{
+			return 0;
+		}
+
+		for (var i = 1; i < SystemLanguageOptions.Length; i++)
+		{
+			if (string.Equals(SystemLanguageOptions[i], value, StringComparison.OrdinalIgnoreCase))
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	private static string DrawSystemLanguagePopup(string current, params GUILayoutOption[] options)
+	{
+		var index = GetSystemLanguageIndex(current);
+		if (index < 0)
+		{
+			var customLabel = $"Custom: {current}";
+			var customOptions = new string[SystemLanguageOptions.Length + 1];
+			Array.Copy(SystemLanguageOptions, customOptions, SystemLanguageOptions.Length);
+			customOptions[customOptions.Length - 1] = customLabel;
+
+			var selected = EditorGUILayout.Popup(customOptions.Length - 1, customOptions, options);
+			if (selected == customOptions.Length - 1)
+			{
+				return current ?? string.Empty;
+			}
+
+			return selected == 0 ? string.Empty : customOptions[selected];
+		}
+
+		var updated = EditorGUILayout.Popup(index, SystemLanguageOptions, options);
+		return updated == 0 ? string.Empty : SystemLanguageOptions[updated];
 	}
 
 	private void RestoreSelection()
