@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+#if UNITY_6000_0_OR_NEWER
+using UnityEngine.TextCore;
+#endif
 
 namespace LocalizedDomain.Unity
 {
@@ -96,7 +100,12 @@ namespace LocalizedDomain.Unity
             Alignment = text.alignment;
             Color = text.color;
             RichText = text.richText;
+#if UNITY_6000_0_OR_NEWER
+            WordWrapping = text.textWrappingMode == TextWrappingModes.Normal
+                || text.textWrappingMode == TextWrappingModes.PreserveWhitespace;
+#else
             WordWrapping = text.enableWordWrapping;
+#endif
             OverflowMode = text.overflowMode;
             AutoSize = text.enableAutoSizing;
             FontSizeMin = text.fontSizeMin;
@@ -105,7 +114,11 @@ namespace LocalizedDomain.Unity
             CharacterSpacing = text.characterSpacing;
             ParagraphSpacing = text.paragraphSpacing;
             WordSpacing = text.wordSpacing;
+#if UNITY_6000_0_OR_NEWER
+            EnableKerning = text.fontFeatures.Contains(OTL_FeatureTag.kern);
+#else
             EnableKerning = text.enableKerning;
+#endif
         }
 
         public void Apply(TMP_Text text)
@@ -130,7 +143,11 @@ namespace LocalizedDomain.Unity
             text.alignment = Alignment;
             text.color = Color;
             text.richText = RichText;
+#if UNITY_6000_0_OR_NEWER
+            text.textWrappingMode = WordWrapping ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
+#else
             text.enableWordWrapping = WordWrapping;
+#endif
             text.overflowMode = OverflowMode;
             text.enableAutoSizing = AutoSize;
             text.fontSizeMin = FontSizeMin;
@@ -139,7 +156,17 @@ namespace LocalizedDomain.Unity
             text.characterSpacing = CharacterSpacing;
             text.paragraphSpacing = ParagraphSpacing;
             text.wordSpacing = WordSpacing;
+#if UNITY_6000_0_OR_NEWER
+            var features = new List<OTL_FeatureTag>(text.fontFeatures);
+            features.RemoveAll(feature => feature == OTL_FeatureTag.kern);
+            if (EnableKerning)
+            {
+                features.Add(OTL_FeatureTag.kern);
+            }
+            text.fontFeatures = features;
+#else
             text.enableKerning = EnableKerning;
+#endif
         }
     }
 }

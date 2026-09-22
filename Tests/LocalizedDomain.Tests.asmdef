@@ -3,6 +3,8 @@
     "rootNamespace": "LocalizedDomain.Tests",
     "references": [
         "LocalizedDomain.Core",
+        "LocalizedDomain.Unity.TextMeshPro",
+        "Unity.TextMeshPro",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
